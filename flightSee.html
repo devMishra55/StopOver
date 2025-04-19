@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Modern Search Container Styles with New Color Scheme */
+    :root {
+      --primary-color: #2887ff;
+      --primary-color-dark: #2476da;
+      --text-dark: #0a0a0a;
+      --text-light: #737373;
+      --extra-light: #f3f4f6;
+      --white: #ffffff;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .search-container-section {
+      padding: 2rem;
+      background: var(--extra-light);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      margin: 2rem auto;
+      max-width: 1200px;
+      color: var(--text-dark);
+      animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .search-container {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .tabs {
+      display: flex;
+      background: var(--extra-light);
+      border-radius: 12px 12px 0 0;
+      overflow: hidden;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 1.2rem;
+      border: none;
+      background: none;
+      color: var(--text-light);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .tab:hover {
+      color: var(--primary-color);
+    }
+
+    .tab.active {
+      color: var(--primary-color);
+      background: var(--white);
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 3px;
+      background: var(--primary-color);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .search-form {
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-dark);
+      font-size: 0.95rem;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--text-dark);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(40, 135, 255, 0.2);
+    }
+
+    .input-group input::placeholder {
+      color: var(--text-light);
+      opacity: 0.6;
+    }
+
+    .btn, .search-btn {
+      grid-column: 1 / -1;
+      padding: 16px;
+      background: var(--primary-color);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 0.5rem;
+      box-shadow: 0 4px 12px rgba(40, 135, 255, 0.2);
+    }
+
+    .btn:hover, .search-btn:hover {
+      background: var(--primary-color-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(40, 135, 255, 0.3);
+    }
+
+    .btn:active, .search-btn:active {
+      transform: translateY(0);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Autocomplete dropdown */
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #e0e0e0;
+      border-top: none;
+      z-index: 99;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 220px;
+      overflow-y: auto;
+      background: var(--white);
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .autocomplete-items div {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      color: var(--text-dark);
+      transition: all 0.2s ease;
+    }
+
+    .autocomplete-items div:hover {
+      background-color: var(--extra-light);
+    }
+
+    .autocomplete-active {
+      background-color: var(--primary-color) !important;
+      color: var(--white) !important;
+    }
+
+    /* Trip type selector */
+    .trip-type {
+      display: flex;
+      background: var(--extra-light);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      grid-column: 1 / -1;
+    }
+
+    .trip-type button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: none;
+      color: var(--text-light);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .trip-type button:hover {
+      color: var(--primary-color);
+    }
+
+    .trip-type button.active {
+      color: var(--primary-color);
+      background: var(--white);
+      font-weight: 600;
+    }
+
+    .trip-type button.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 2px;
+      background: var(--primary-color);
+    }
+
+    /* Checkbox styling */
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 0;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-color);
+      cursor: pointer;
+    }
+
+    .checkbox-container label {
+      margin: 0;
+      cursor: pointer;
+      color: var(--text-dark);
+      font-size: 0.95rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .search-form {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+      }
+      
+      .search-container-section {
+        padding: 1.5rem;
+        border-radius: 16px;
+      }
+      
+      .tab {
+        padding: 1rem;
+        font-size: 1rem;
+      }
+      
+      .trip-type button {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Floating label animation */
+    .input-group.focused label {
+      transform: translateY(-5px);
+      font-size: 0.8rem;
+      color: var(--primary-color);
+    }
+
+    /* Date input custom styling */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.5);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      filter: invert(0.3);
+      background: rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Your existing nav bar here -->
+  <nav>
+    <div class="nav__header">
+      <div class="nav__logo">
+        <a href="./index.html" class="logo">Skywings</a>
+      </div>
+    </div>
+    <ul class="nav__links" id="nav-links">
+      <li><a href="#">BOOK TRIP</a></li>
+    </ul>
+    <div class="nav__btns">
+      <button class="btn" onclick="window.location.href='flightSee.html' ">BOOK TRIP</button>
+    </div>
+  </nav>
+
+  <section class="search-container-section">
+    <div class="search-container">
+      <div class="tabs">
+        <button class="tab active" id="flight-tab">✈️ Flights</button>
+        <button class="tab" id="hotel-tab">🏨 Hotels</button>
+      </div>
+
+      <!-- Flight Form -->
+      <form action="#" class="search-form" id="flight-form">
+        <div class="trip-type">
+          <button type="button" class="active" data-trip-type="roundtrip">Round Trip</button>
+          <button type="button" data-trip-type="oneway">One Way</button>
+        </div>
+        
+        <div class="input-group autocomplete">
+          <label>From</label>
+          <input type="text" id="flight-origin" placeholder="City or Airport" autocomplete="off">
+          <div id="origin-autocomplete-list" class="autocomplete-items"></div>
+        </div>
+
+        <div class="input-group autocomplete">
+          <label>To</label>
+          <input type="text" id="flight-destination" placeholder="City or Airport" autocomplete="off">
+          <div id="destination-autocomplete-list" class="autocomplete-items"></div>
+        </div>
+
+        <div class="input-group">
+          <label>Depart Date</label>
+          <input type="date" id="depart-date">
+        </div>
+
+        <div class="input-group return-date-group">
+          <label>Return Date</label>
+          <input type="date" id="return-date">
+        </div>
+
+        <div class="input-group">
+          <label>Passengers</label>
+          <select id="passengers">
+            <option value="1">1 Passenger, Economy</option>
+            <option value="2">2 Passengers, Economy</option>
+            <option value="3">3 Passengers, Economy</option>
+            <option value="1b">1 Passenger, Business</option>
+            <option value="2b">2 Passengers, Business</option>
+            <option value="3b">3 Passengers, Business</option>
+          </select>
+        </div>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="direct-flights">
+          <label for="direct-flights">Direct flights only</label>
+        </div>
+
+        <button type="button" class="btn" id="search-flights">
+          <i class="ri-search-line"></i> Search Flights
+        </button>
+      </form>
+
+      <!-- Hotel Form -->
+      <form action="#" class="search-form hidden" id="hotel-form">
+        <div class="input-group full-width autocomplete">
+          <label>City or hotel name</label>
+          <input type="text" id="hotel-search" placeholder="Enter destination or hotel name" autocomplete="off">
+          <div id="hotel-autocomplete-list" class="autocomplete-items"></div>
+        </div>
+
+        <div class="input-group">
+          <label>Check in</label>
+          <input type="date" id="check-in">
+        </div>
+
+        <div class="input-group">
+          <label>Check out</label>
+          <input type="date" id="check-out">
+        </div>
+
+        <div class="input-group">
+          <label>Guests</label>
+          <select id="hotel-guests">
+            <option value="1">1 Guest</option>
+            <option value="2">2 Guests</option>
+            <option value="3">3 Guests</option>
+            <option value="4">4 Guests</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>Rooms</label>
+          <select id="hotel-rooms">
+            <option value="1">1 Room</option>
+            <option value="2">2 Rooms</option>
+            <option value="3">3 Rooms</option>
+          </select>
+        </div>
+
+        <button type="button" class="search-btn" id="search-hotels">
+          <i class="ri-hotel-bed-line"></i> Search Hotels
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Your existing footer here -->
+  <footer id="contact">
+    <div class="section__container footer__container">
+      <div class="footer__col">
+        <div class="footer__logo">
+          <a href="#" class="logo">Skywings</a>
+        </div>
+        <p>
+          Explore the world with ease and excitement through our comprehensive
+          travel platform. Your journey begins here, where seamless planning
+          meets unforgettable experiences.
+        </p>
+      </div>
+      <div class="footer__col">
+        <h4>Quick Links</h4>
+        <ul class="footer__links">
+          <li><a href="./aboutUs.html">About Us</a></li>
+          <li><a href="./terms&Condition.html">Terms & Conditions</a></li>
+          <li><a href="./privacyPolicy.html">Privacy Policy</a></li>
+          <li><a href="./cookiePolicy.html">Cookie Policy</a></li>
+          <li><a href="./return&Refund.html">Return & Refund</a></li>
+          <li><a href="./blogContent.html">Blog</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Contact Us</h4>
+        <ul class="footer__links">
+          <li>
+            <a href="#">
+              <span><i class="ri-phone-fill"></i></span> +91 9876543210
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span><i class="ri-record-mail-line"></i></span> info@skywings
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span><i class="ri-map-pin-2-fill"></i></span> USA
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Subscribe</h4>
+        <form action="/">
+          <input type="text" placeholder="Enter your email" />
+          <button class="btn">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer__bar">
+      Copyright © 2025 Skywings. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // DOM Elements
+    const flightTab = document.getElementById('flight-tab');
+    const hotelTab = document.getElementById('hotel-tab');
+    const flightForm = document.getElementById('flight-form');
+    const hotelForm = document.getElementById('hotel-form');
+    const tripTypeButtons = document.querySelectorAll('[data-trip-type]');
+    const returnDateGroup = document.querySelector('.return-date-group');
+    const searchFlightsBtn = document.getElementById('search-flights');
+    const searchHotelsBtn = document.getElementById('search-hotels');
+    
+    // API Configuration
+    const FLIGHT_API_URL = 'https://api.skypicker.com/locations?term=';
+    const HOTEL_API_URL = 'https://hotels4.p.rapidapi.com/locations/v2/search?query=';
+    const HOTEL_API_KEY = 'your-hotel-api-key-here'; // Replace with your actual API key
+    
+    // Tab Switching with animation
+    flightTab.addEventListener('click', () => {
+      if (flightTab.classList.contains('active')) return;
+      
+      flightForm.style.animation = 'none';
+      void flightForm.offsetWidth; // Trigger reflow
+      flightForm.style.animation = 'slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+      
+      flightTab.classList.add('active');
+      hotelTab.classList.remove('active');
+      flightForm.classList.remove('hidden');
+      hotelForm.classList.add('hidden');
+    });
+    
+    hotelTab.addEventListener('click', () => {
+      if (hotelTab.classList.contains('active')) return;
+      
+      hotelForm.style.animation = 'none';
+      void hotelForm.offsetWidth; // Trigger reflow
+      hotelForm.style.animation = 'slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+      
+      hotelTab.classList.add('active');
+      flightTab.classList.remove('active');
+      hotelForm.classList.remove('hidden');
+      flightForm.classList.add('hidden');
+    });
+    
+    // Trip Type Selection with animation
+    tripTypeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        if (button.classList.contains('active')) return;
+        
+        tripTypeButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Animate the return date field
+        if (button.dataset.tripType === 'oneway') {
+          returnDateGroup.style.opacity = '0';
+          returnDateGroup.style.height = '0';
+          returnDateGroup.style.margin = '0';
+          returnDateGroup.style.padding = '0';
+          setTimeout(() => {
+            returnDateGroup.style.display = 'none';
+          }, 300);
+        } else {
+          returnDateGroup.style.display = 'block';
+          setTimeout(() => {
+            returnDateGroup.style.opacity = '1';
+            returnDateGroup.style.height = '';
+            returnDateGroup.style.margin = '';
+            returnDateGroup.style.padding = '';
+          }, 10);
+        }
+      });
+    });
+    
+    // Input focus animations
+    document.querySelectorAll('.input-group input, .input-group select').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      });
+      
+      input.addEventListener('blur', function() {
+        if (!this.value) {
+          this.parentElement.classList.remove('focused');
+        }
+      });
+      
+      // Initialize focused state if value exists
+      if (input.value) {
+        input.parentElement.classList.add('focused');
+      }
+    });
+    
+    // Flight Autocomplete
+    function setupAutocomplete(inputId, resultsId, apiType) {
+      const input = document.getElementById(inputId);
+      const resultsContainer = document.getElementById(resultsId);
+      
+      input.addEventListener('input', async function() {
+        const query = this.value.trim();
+        
+        if (query.length < 2) {
+          resultsContainer.innerHTML = '';
+          resultsContainer.style.display = 'none';
+          return;
+        }
+        
+        try {
+          let apiUrl;
+          if (apiType === 'flight') {
+            apiUrl = `${FLIGHT_API_URL}${encodeURIComponent(query)}&locale=en-US&location_types=airport&limit=5`;
+          } else {
+            apiUrl = `${HOTEL_API_URL}${encodeURIComponent(query)}`;
+          }
+          
+          const response = await fetch(apiUrl, {
+            headers: apiType === 'hotel' ? {
+              'X-RapidAPI-Key': HOTEL_API_KEY,
+              'X-RapidAPI-Host': 'hotels4.p.rapidapi.com'
+            } : {}
+          });
+          
+          const data = await response.json();
+          
+          if (apiType === 'flight') {
+            displayFlightResults(data.locations || [], resultsContainer, input);
+          } else {
+            displayHotelResults(data.suggestions?.[0]?.entities || [], resultsContainer, input);
+          }
+        } catch (error) {
+          console.error('Autocomplete error:', error);
+          resultsContainer.innerHTML = '<div>Error loading suggestions</div>';
+          resultsContainer.style.display = 'block';
+        }
+      });
+      
+      // Hide results when clicking elsewhere
+      document.addEventListener('click', (e) => {
+        if (e.target !== input) {
+          resultsContainer.style.display = 'none';
+        }
+      });
+    }
+    
+    function displayFlightResults(locations, container, input) {
+      if (!locations.length) {
+        container.innerHTML = '<div>No results found</div>';
+        container.style.display = 'block';
+        return;
+      }
+      
+      container.innerHTML = '';
+      locations.forEach(location => {
+        const div = document.createElement('div');
+        div.innerHTML = `<strong>${location.name}</strong> <small>(${location.code})</small>`;
+        div.addEventListener('click', () => {
+          input.value = `${location.name} (${location.code})`;
+          container.style.display = 'none';
+          input.parentElement.classList.add('focused');
+        });
+        container.appendChild(div);
+      });
+      container.style.display = 'block';
+    }
+    
+    function displayHotelResults(hotels, container, input) {
+      if (!hotels.length) {
+        container.innerHTML = '<div>No results found</div>';
+        container.style.display = 'block';
+        return;
+      }
+      
+      container.innerHTML = '';
+      hotels.slice(0, 5).forEach(hotel => {
+        const div = document.createElement('div');
+        div.innerHTML = `<strong>${hotel.name}</strong>, ${hotel.cityName || ''}`;
+        div.addEventListener('click', () => {
+          input.value = `${hotel.name}, ${hotel.cityName || ''}`;
+          container.style.display = 'none';
+          input.parentElement.classList.add('focused');
+        });
+        container.appendChild(div);
+      });
+      container.style.display = 'block';
+    }
+    
+    // Initialize autocomplete
+    setupAutocomplete('flight-origin', 'origin-autocomplete-list', 'flight');
+    setupAutocomplete('flight-destination', 'destination-autocomplete-list', 'flight');
+    setupAutocomplete('hotel-search', 'hotel-autocomplete-list', 'hotel');
+    
+    // Search button handlers with animation
+    searchFlightsBtn.addEventListener('click', () => {
+      // Add click animation
+      searchFlightsBtn.style.transform = 'scale(0.98)';
+      setTimeout(() => {
+        searchFlightsBtn.style.transform = '';
+      }, 200);
+      
+      const origin = document.getElementById('flight-origin').value;
+      const destination = document.getElementById('flight-destination').value;
+      const departDate = document.getElementById('depart-date').value;
+      const returnDate = document.getElementById('return-date').value;
+      const passengers = document.getElementById('passengers').value;
+      const directOnly = document.getElementById('direct-flights').checked;
+      
+      if (!origin || !destination || !departDate) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      // In a real app, you would make an API call here
+      console.log('Searching flights:', {
+        origin, destination, departDate, returnDate, passengers, directOnly
+      });
+      
+      // Redirect to contact.html after a slight delay for animation
+      setTimeout(() => {
+        window.location.href = 'contact.html';
+      }, 300);
+    });
+    
+    searchHotelsBtn.addEventListener('click', () => {
+      // Add click animation
+      searchHotelsBtn.style.transform = 'scale(0.98)';
+      setTimeout(() => {
+        searchHotelsBtn.style.transform = '';
+      }, 200);
+      
+      const location = document.getElementById('hotel-search').value;
+      const checkIn = document.getElementById('check-in').value;
+      const checkOut = document.getElementById('check-out').value;
+      const guests = document.getElementById('hotel-guests').value;
+      const rooms = document.getElementById('hotel-rooms').value;
+      
+      if (!location || !checkIn || !checkOut) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      // In a real app, you would make an API call here
+      console.log('Searching hotels:', {
+        location, checkIn, checkOut, guests, rooms
+      });
+      
+      // Redirect to contact.html after a slight delay for animation
+      setTimeout(() => {
+        window.location.href = 'contact.html';
+      }, 300);
+    });
+    
+    // Set default dates (today + 3 days for depart, +10 for return)
+    const today = new Date();
+    const departDate = new Date();
+    departDate.setDate(today.getDate() + 3);
+    const returnDate = new Date();
+    returnDate.setDate(today.getDate() + 10);
+    
+    document.getElementById('depart-date').valueAsDate = departDate;
+    document.getElementById('return-date').valueAsDate = returnDate;
+    document.getElementById('check-in').valueAsDate = departDate;
+    document.getElementById('check-out').valueAsDate = returnDate;
+    
+    // Initialize focused labels for date inputs
+    document.querySelectorAll('input[type="date"]').forEach(input => {
+      if (input.value) {
+        input.parentElement.classList.add('focused');
+      }
+    });
+  </script>
+</body>
+</html>

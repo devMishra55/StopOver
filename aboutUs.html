@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <title>About Us | Skywings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css"> <!-- Your existing CSS -->
+    <style>
+        /* ABOUT PAGE SPECIFIC STYLES ONLY */
+        .about-hero {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .mission-section {
+            padding: 5rem 2rem;
+            background-color: white;
+            position: relative;
+        }
+
+        .mission-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .mission-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .mission-text h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+        }
+
+        .mission-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .mission-image {
+            position: relative;
+            height: 500px;
+            perspective: 1000px;
+        }
+
+        .floating-image {
+            position: absolute;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            overflow: hidden;
+        }
+
+        .image-1 {
+            width: 60%;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            transform: rotate(-5deg);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .image-2 {
+            width: 55%;
+            bottom: 0;
+            right: 0;
+            z-index: 1;
+            transform: rotate(5deg);
+            animation: float 7s ease-in-out infinite 1s;
+        }
+
+        .image-3 {
+            width: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(2deg);
+            z-index: 3;
+            animation: float 8s ease-in-out infinite 0.5s;
+        }
+
+        .values-section {
+            padding: 5rem 2rem;
+            background-color: var(--extra-light);
+        }
+
+        .values-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .value-card:hover .value-icon {
+            transform: scale(1.2) rotate(15deg);
+        }
+
+        .value-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .value-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .team-section {
+            padding: 5rem 2rem;
+            background-color: white;
+        }
+
+        .team-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-member {
+            position: relative;
+            height: 350px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .member-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .member-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            transform: translateY(100px);
+            transition: transform 0.5s ease;
+            opacity: 0;
+        }
+
+        .team-member:hover .member-info {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .team-member:hover .member-image {
+            transform: scale(1.1);
+        }
+
+        .member-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-info p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .cta-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background-color: white;
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(var(--rotate, 0deg)); }
+            50% { transform: translateY(-20px) rotate(var(--rotate, 0deg)); }
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 992px) {
+            .mission-content {
+                grid-template-columns: 1fr;
+            }
+
+            .mission-image {
+                height: 400px;
+                margin-top: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .mission-text h2 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .mission-image {
+                height: 300px;
+            }
+
+            .value-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Your Navigation Bar -->
+    <nav>
+        <div class="nav__header">
+            <div class="nav__logo">
+                <a href="./index.html" class="logo">Skywings</a>
+            </div>
+            <button class="nav__menu__btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="nav__btns">
+            <button class="btn" onclick="window.location.href='flightSee.html' ">BOOK TRIP</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <video class="hero-video" autoplay muted loop>
+            <source src="https://videos.pexels.com/video-files/31558485/13449512_1920_1080_30fps.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1>Our Story</h1>
+            <p>Where passion for travel meets exceptional experiences</p>
+            <div class="scroll-down">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission-section">
+        <div class="mission-content">
+            <div class="mission-text">
+                <!-- <h2>Our Mission</h2>
+                <p>At Skywings, we believe travel isn't just about destinations—it's about transformation. Every journey sparks a new story, and we're here to make yours unforgettable.</p>
+                <p>Founded by a team of passionate globetrotters, we've turned our love for exploration into a mission: to make extraordinary travel accessible to everyone. Whether you're a solo adventurer, a couple seeking romance, or a family creating lifelong memories, we craft experiences that go beyond the ordinary.</p>
+                <p>Because the world shouldn't just be seen—it should be felt.</p> -->
+                <section id="about" style="max-width: 800px; margin: 0 auto; padding: 60px 20px; font-family: Arial, sans-serif; color: #333;">
+                  <h2 style="font-size: 36px; font-weight: bold; margin-bottom: 40px; text-align: center;">✈️ About Skywings</h2>
+                
+                  <p style="font-size: 18px; line-height: 1.7; margin-bottom: 30px;">
+                    <strong>At Skywings, we don’t just plan trips—we create unforgettable journeys.</strong><br>
+                    To us, travel isn’t only about ticking off destinations. It’s about transformation. Every journey is a new story waiting to be written—and we’re here to help you make it unforgettable.
+                  </p>
+                
+                  <p style="font-size: 18px; line-height: 1.7; margin-bottom: 50px;">
+                    Born from the wanderlust of passionate explorers, Skywings was founded with a single mission: 
+                    <strong>To make extraordinary travel accessible to everyone.</strong><br>
+                    Whether you're a solo soul-seeker, a couple chasing magic, or a family building cherished memories—we design experiences that go beyond the expected. Because travel shouldn’t just be seen… it should be felt.
+                  </p>
+                
+                  <h3 style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">🌍 Why Travel with Skywings?</h3>
+                  <ul style="font-size: 18px; line-height: 1.7; margin-bottom: 30px; padding-left: 20px;">
+                    <li><strong>Tailored for You</strong> – No two travelers are alike, so why should your trips be? We personalize every itinerary to fit your vibe.</li>
+                    <li><strong>Insider Knowledge</strong> – From hidden gems to local favorites, we bring you behind the scenes of every destination.</li>
+                    <li><strong>Unmatched Value</strong> – Competitive pricing, exclusive deals, and curated experiences you won’t find anywhere else.</li>
+                  </ul>
+                  <p style="font-size: 18px; line-height: 1.7; margin-bottom: 50px;">
+                    Whether it’s luxury escapes or budget-friendly adventures, we make sure it feels effortless—from booking to boarding.
+                  </p>
+                
+                  <h3 style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">🌟 The Skywings Difference</h3>
+                  <ul style="font-size: 18px; line-height: 1.7; margin-bottom: 30px; padding-left: 20px;">
+                    <li>24/7 customer support that feels like a friend guiding you home</li>
+                    <li>Local insights to help you explore like a traveler, not a tourist</li>
+                    <li>A seamless booking process—because paradise should be just a few clicks away</li>
+                  </ul>
+                  <p style="font-size: 18px; line-height: 1.7; margin-bottom: 50px;">
+                    We obsess over the details, so <strong>you can focus on the magic</strong>—the food, the people, the cultures, and the memories you'll carry forever.
+                  </p>
+                
+                  <h3 style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">💚 Our Promise</h3>
+                  <p style="font-size: 18px; line-height: 1.7; margin-bottom: 20px;">
+                    <strong>Your trust is our compass.</strong><br>
+                    We believe in responsible, sustainable travel—supporting local communities, promoting eco-friendly options, and protecting the places we love.
+                  </p>
+                  <p style="font-size: 18px; line-height: 1.7; margin-bottom: 50px;">
+                    The world is a gift. We’re here to help you enjoy it—<strong>without leaving a footprint behind.</strong>
+                  </p>
+                
+                  <h3 style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">🌟 Let’s Go Places—Together</h3>
+                  <p style="font-size: 18px; line-height: 1.7; margin-bottom: 10px;">
+                    <strong>Adventure is calling—and it starts with Skywings.</strong><br>
+                    Wherever you're headed, we’re with you all the way. Ready to write your next story?
+                  </p>
+                  <p style="font-size: 18px; font-weight: bold;">Let’s fly. ✈️🌍✨</p>
+                </section>
+                
+            </div>
+            <div class="mission-image">
+                <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                     alt="Mountain adventure" 
+                     class="floating-image image-1"
+                     style="--rotate: -5deg;">
+                <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1568&q=80" 
+                     alt="Beach vacation" 
+                     class="floating-image image-2"
+                     style="--rotate: 5deg;">
+                <img src="https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1620&q=80" 
+                     alt="Cultural experience" 
+                     class="floating-image image-3"
+                     style="--rotate: 2deg;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+        <div class="values-container">
+            <h2 class="section-title">The Skywings Difference</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3>Global Expertise</h3>
+                    <p>Our team scours the globe to handpick the best stays, hidden gems, and must-visit spots—so you don't have to.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Personalized Service</h3>
+                    <p>From luxury escapes to budget-friendly getaways, we tailor every detail to match your style, because no two travelers are alike.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Our customer support feels like a friend guiding you home. We're here whenever you need us, anywhere in the world.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Local Insights</h3>
+                    <p>Our travel tips and local insights help you explore like a pro, not a tourist. Discover the soul of every destination.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Effortless Booking</h3>
+                    <p>Just a few clicks to paradise. We're obsessed with making travel effortless so you can focus on what really matters.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Sustainable Travel</h3>
+                    <p>We're committed to creating positive impacts in the communities we visit through responsible tourism practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- CTA Section -->
+    <!-- <section class="cta-section">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2>Ready for Your Next Adventure?</h2>
+                <p>Wherever you're headed, we'll be there—making sure your journey is as remarkable as the destination. Ready to write your next chapter?</p>
+                <a href="#" class="cta-button">Let's Fly Together ✈️</a>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Your Footer -->
+    <footer id="contact">
+        <div class="section__container footer__container">
+            <div class="footer__col">
+                <div class="footer__logo">
+                    <a href="#" class="logo">Skywings</a>
+                </div>
+                <p>
+                    Explore the world with ease and excitement through our comprehensive
+                    travel platform. Your journey begins here, where seamless planning
+                    meets unforgettable experiences.
+                </p>
+            </div>
+            <div class="footer__col">
+                <h4>Quick Links</h4>
+                <ul class="footer__links">
+                    <li><a href="./aboutUs.html">About Us</a></li>
+                    <li><a href="./privacyPolicy.html">Privacy Policy</a></li>
+                    <li><a href="./cookiePolicy.html">Cookie Policy</a></li>
+                    <li><a href="./return&Refund.html">Return & Refund</a></li>
+                    <li><a href="./blogContent.html">Blog</a></li>
+                    <li><a href="./contact.html">Contact</a></li>
+                    <li><a href="./terms&Condition.html">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer__col">
+                <h4>Contact Us</h4>
+                <ul class="footer__links">
+                    <li>
+                        <a href="#">
+                            <span><i class="fas fa-phone"></i></span> +91 9876543210
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><i class="fas fa-envelope"></i></span> info@skywings
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><i class="fas fa-map-marker-alt"></i></span> USA
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer__col">
+                <h4>Subscribe</h4>
+                <form action="/">
+                    <input type="text" placeholder="Enter your email" />
+                    <button class="btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer__bar">
+            Copyright © 2025 Skywings. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animate elements when they come into view
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.mission-text, .value-card, .team-member');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        // Set initial state for animated elements
+        document.querySelectorAll('.mission-text, .value-card, .team-member').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        });
+
+        // Add scroll event listener
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+
+        // Floating images animation
+        const floatingImages = document.querySelectorAll('.floating-image');
+        floatingImages.forEach(img => {
+            img.style.setProperty('--rotate', img.style.getPropertyValue('--rotate') || '0deg');
+        });
+    </script>
+</body>
+</html>

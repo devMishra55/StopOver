@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <title>Travel Blog | Skywings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css"> 
+    <style>
+        /* BLOG CONTENT SPECIFIC STYLES ONLY */
+        .blog-container {
+            max-width: 1200px;
+            margin: 100px auto 40px;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .blog-header {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInDown 1s ease;
+        }
+
+        .blog-subheader {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            perspective: 1000px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0;
+            transform: translateY(20px) rotateY(10deg);
+            animation: cardEntrance 0.6s ease-out forwards;
+            cursor: pointer;
+        }
+
+        .blog-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .blog-card:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .blog-card:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .blog-card:nth-child(4) {
+            animation-delay: 0.5s;
+        }
+
+        .blog-card:nth-child(5) {
+            animation-delay: 0.6s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .blog-image {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .blog-card:hover .blog-image {
+            transform: scale(1.05);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .blog-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .blog-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #2c3e50;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .blog-card:hover .blog-category {
+            background: #3498db;
+            color: white;
+        }
+
+        .blog-content {
+            padding: 25px;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-card:hover .blog-content {
+            transform: translateY(-5px);
+        }
+
+        .blog-content h2 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            transition: color 0.3s ease;
+        }
+
+        .blog-card:hover .blog-content h2 {
+            color: #3498db;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .blog-meta i {
+            margin-right: 5px;
+            color: #3498db;
+        }
+
+        .blog-content p {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .read-more {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            padding-bottom: 3px;
+        }
+
+        .read-more::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #3498db;
+            transition: width 0.3s ease;
+        }
+
+        .read-more:hover::after {
+            width: 100%;
+        }
+
+        .read-more i {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .read-more:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Full Article View */
+        .full-article {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .back-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .back-button:hover {
+            background: #2980b9;
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .article-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-content img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .article-content img:hover {
+            transform: scale(1.02);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            color: #7f8c8d;
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            background: #f1f8fe;
+            color: #3498db;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .article-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            line-height: 1.3;
+        }
+
+        .article-content h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: #3498db;
+        }
+
+        .article-content p {
+            color: #555;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px) rotateY(10deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .blog-header {
+                font-size: 2.5rem;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .article-content {
+                padding: 20px;
+            }
+            
+            .article-content img {
+                height: 250px;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .blog-header {
+                font-size: 2rem;
+            }
+            
+            .blog-subheader {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Your Navigation Bar -->
+    <nav class="blog-nav">
+        <div class="nav__header">
+            <div class="nav__logo">
+                <a href="./index.html" class="logo">Skywings</a>
+            </div>
+            <button class="nav__menu__btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- <ul class="nav__links" id="navLinks">
+            <li><a href="./contact.html">BOOK TRIP</a></li>
+        </ul> -->
+        <!-- <div class="nav__btns">
+            <button class="btn" onclick="window.location.href='contact.html' ">BOOK TRIP</button>
+        </div> -->
+    </nav>
+
+    <!-- Main Blog Content -->
+    <div class="blog-container">
+        <h1 class="blog-header">Wanderlust Chronicles</h1>
+        <p class="blog-subheader">Stories from around the globe</p>
+        
+        <div class="blog-grid" id="blogGrid">
+            <!-- Blog cards will be generated by JavaScript -->
+        </div>
+
+        <!-- Full Article View (hidden initially) -->
+        <div class="full-article" id="fullArticle">
+            <button class="back-button" id="backButton">
+                <i class="fas fa-arrow-left"></i> Back to Articles
+            </button>
+            <div class="article-content" id="articleContent">
+                <!-- Content will be loaded by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Your Footer -->
+    <footer id="contact">
+        <div class="section__container footer__container">
+            <div class="footer__col">
+                <div class="footer__logo">
+                    <a href="#" class="logo">Skywings</a>
+                </div>
+                <p>
+                    Explore the world with ease and excitement through our comprehensive
+                    travel platform. Your journey begins here, where seamless planning
+                    meets unforgettable experiences.
+                </p>
+            </div>
+            <div class="footer__col">
+                <h4>Quick Links</h4>
+                <ul class="footer__links">
+                    <li><a href="./aboutUs.html">About Us</a></li>
+                    <li><a href="./privacyPolicy.html">Privacy Policy</a></li>
+                    <li><a href="./cookiePolicy.html">Cookie Policy</a></li>
+                    <li><a href="./return&Refund.html">Return & Refund</a></li>
+                    <li><a href="./blogContent.html">Blog</a></li>
+                    <li><a href="./contact.html">Contact</a></li>
+                    <li><a href="./terms&Condition.html">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer__col">
+                <h4>Contact Us</h4>
+                <ul class="footer__links">
+                    <li>
+                        <a href="#">
+                            <span><i class="fas fa-phone"></i></span> +91 9876543210
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><i class="fas fa-envelope"></i></span> info@skywings
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span><i class="fas fa-map-marker-alt"></i></span> USA
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer__col">
+                <h4>Subscribe</h4>
+                <form action="/">
+                    <input type="text" placeholder="Enter your email" />
+                    <button class="btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer__bar">
+            Copyright © 2025 Skywings. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Blog Data with varied dates (2016-2025)
+        const blogPosts = [
+            {
+                id: 1,
+                title: "Hiking the Swiss Alps",
+                category: "Adventure",
+                date: "June 15, 2021",
+                readTime: "5 min read",
+                image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                excerpt: "Discover the breathtaking trails of Zermatt and the hidden gems of Matterhorn region that most tourists never see...",
+                content: `
+                    <h2>Hiking the Swiss Alps</h2>
+                    <div class="article-meta">
+                        <span><i class="fas fa-calendar-alt"></i> June 15, 2021</span>
+                        <span><i class="fas fa-clock"></i> 5 min read</span>
+                        <span class="article-category">Adventure</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Swiss Alps">
+                    <p>The moment I stepped off the train in Zermatt, the crisp mountain air filled my lungs and the majestic Matterhorn stood proudly against a cerulean sky. This car-free village, with its charming chalets and flower-lined streets, was the perfect starting point for my alpine adventure.</p>
+                    
+                    <h3>The Five Lakes Trail</h3>
+                    <p>My first hike was the legendary 5-Seenweg (Five Lakes Walk), a 9.8km trail that offers some of the most spectacular Matterhorn reflections. Starting at Blauherd station (reached via cable car), the path winds past:</p>
+                    <ul>
+                        <li><strong>Stellisee:</strong> The most famous photo spot where the Matterhorn mirrors perfectly on calm mornings</li>
+                        <li><strong>Grindjisee:</strong> A hidden emerald lake surrounded by wildflowers</li>
+                        <li><strong>Grünsee:</strong> Surrounded by larch trees with crystal-clear waters perfect for a quick dip</li>
+                    </ul>
+                    
+                    <h3>Gornergrat Panorama</h3>
+                    <p>No visit is complete without riding Europe's highest open-air cogwheel train to Gornergrat (3,089m). The 360° view encompasses 29 four-thousand-meter peaks including the Monte Rosa massif. Pro tip: Visit at sunrise when the mountains glow pink and crowds are minimal.</p>
+                    
+                    <p>As I descended on my final day, I understood why the Swiss say "Bergluft macht frei" (Mountain air makes you free). The Alps don't just offer trails—they offer transformation.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "Kyoto's Hidden Temples",
+                category: "Culture",
+                date: "May 22, 2019",
+                readTime: "7 min read",
+                image: "https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1620&q=80",
+                excerpt: "Beyond the golden pavilion lies Kyoto's secret spiritual world - quiet bamboo groves and moss-covered shrines where time stands still...",
+                content: `
+                    <h2>Kyoto's Hidden Temples</h2>
+                    <div class="article-meta">
+                        <span><i class="fas fa-calendar-alt"></i> May 22, 2019</span>
+                        <span><i class="fas fa-clock"></i> 7 min read</span>
+                        <span class="article-category">Culture</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1620&q=80" alt="Kyoto Temple">
+                    <p>While most visitors flock to Kinkaku-ji's golden splendor or Fushimi Inari's vermilion tunnels, Kyoto's true magic lies in its overlooked sanctuaries. Armed with a bicycle and a map marked by a local monk, I discovered these hidden gems:</p>
+                    
+                    <h3>Gio-ji Temple</h3>
+                    <p>Tucked away in Arashiyama's western edge, this thatched-roof temple is carpeted with luminous moss that glows emerald after rain. The maple trees here are centuries old, their branches forming a living cathedral ceiling. I spent hours meditating in the roji (dewy path) garden, where the only sounds were rustling leaves and distant temple bells.</p>
+                    
+                    <h3>Otagi Nenbutsu-ji</h3>
+                    <p>This hillside temple houses 1,200 whimsical rakan (disciple) statues, each with unique facial expressions carved by amateur volunteers in the 1980s. Some laugh, some meditate, one even holds a sake bottle—a delightful contrast to Kyoto's usual solemnity. The uphill walk through bamboo forests makes the discovery even sweeter.</p>
+                    
+                    <p>As evening fell over Philosopher's Path, I realized Kyoto doesn't reveal its secrets—it whispers them to those willing to wander beyond the guidebooks.</p>
+                `
+            },
+            {
+                id: 3,
+                title: "Italian Cooking Secrets",
+                category: "Food",
+                date: "April 10, 2017",
+                readTime: "4 min read",
+                image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80",
+                excerpt: "Learn the pasta-making traditions from Tuscan grandmothers and where to find the most authentic pesto in Genoa...",
+                content: `
+                    <h2>Italian Cooking Secrets</h2>
+                    <div class="article-meta">
+                        <span><i class="fas fa-calendar-alt"></i> April 10, 2017</span>
+                        <span><i class="fas fa-clock"></i> 4 min read</span>
+                        <span class="article-category">Food</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80" alt="Italian Pasta">
+                    <p>My culinary pilgrimage through Italy began in Bologna's Quadrilatero market, where third-generation vendors revealed ingredients you'll never find abroad. Here are the priceless lessons I collected:</p>
+                    
+                    <h3>The Art of Pasta Fresca</h3>
+                    <p>In a Tuscan farmhouse, nonna Giulia taught me her 70-year-old technique: "Use one egg per 100g of flour, but only the golden yolks from our chickens." We rolled pici (hand-rolled spaghetti) on wooden boards, the rhythm as meditative as kneading bread. The secret? Rest the dough wrapped in linen for exactly 30 minutes—no more, no less.</p>
+                    
+                    <h3>Genoa's Pesto Code</h3>
+                    <p>At Antica Sciamadda, a 50-year-old focacceria, I learned authentic pesto requires:</p>
+                    <ul>
+                        <li>Basilico Genovese DOP (tiny-leaf variety grown only in Liguria)</li>
+                        <li>Pine nuts toasted to the exact shade of a monk's robe</li>
+                        <li>A marble mortar and wooden pestle—never a food processor</li>
+                    </ul>
+                    
+                    <p>As I drizzled my first homemade pesto over trofie pasta, I understood Italian cuisine isn't about recipes—it's about respect for ingredients that taste of the land itself.</p>
+                `
+            },
+            {
+                id: 4,
+                title: "Safari in Botswana",
+                category: "Wildlife",
+                date: "March 5, 2023",
+                readTime: "9 min read",
+                image: "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                excerpt: "Tracking elephants through the Okavango Delta at golden hour - an intimate encounter with Africa's gentle giants...",
+                content: `
+                    <h2>Safari in Botswana</h2>
+                    <div class="article-meta">
+                        <span><i class="fas fa-calendar-alt"></i> March 5, 2023</span>
+                        <span><i class="fas fa-clock"></i> 9 min read</span>
+                        <span class="article-category">Wildlife</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1518391846015-55a9cc003b25?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Botswana Safari">
+                    <p>The mokoro (dugout canoe) glided silently through Okavango's waterways as our guide Kabelo pointed to fresh elephant tracks in the reed beds. "They're close," he whispered, just as a matriarch emerged 20 meters away, her ears flapping like continents adrift.</p>
+                    
+                    <h3>Elephant Sands</h3>
+                    <p>At this unique campsite, herds come to drink at a waterhole just meters from your tent. I spent one unforgettable evening watching a juvenile practice his trunk skills—dropping and retrieving the same stick repeatedly while his family bathed in golden twilight. The deep rumbles of their infrasound communication vibrated through my chest.</p>
+                    
+                    <h3>Moremi's Magic</h3>
+                    <p>Game drives revealed nature's theater: 
+                        <br>- A leopard dragging an impala up a sausage tree
+                        <br>- Wild dogs teaching pups to hunt
+                        <br>- Hundreds of red lechwe antelope bounding through knee-deep water
+                    </p>
+                    
+                    <p>As our plane lifted over the Delta's labyrinth of channels, I finally understood the Setswana phrase "Pula!"—not just "rain," but a celebration of life's interdependence.</p>
+                `
+            },
+            {
+                id: 5,
+                title: "Philippines Island Hopping",
+                category: "Beaches",
+                date: "February 18, 2025",
+                readTime: "6 min read",
+                image: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1568&q=80",
+                excerpt: "From the limestone cliffs of El Nido to the underwater rivers of Coron - navigating paradise on a local bangka boat...",
+                content: `
+                    <h2>Philippines Island Hopping</h2>
+                    <div class="article-meta">
+                        <span><i class="fas fa-calendar-alt"></i> February 18, 2025</span>
+                        <span><i class="fas fa-clock"></i> 6 min read</span>
+                        <span class="article-category">Beaches</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1568&q=80" alt="Philippines Beach">
+                    <p>Our bangka (outrigger boat) sliced through glassy waters as we began the ultimate Palawan island-hopping adventure. Captain Juan, a third-generation fisherman, knew secret spots no map could show:</p>
+                    
+                    <h3>Hidden Lagoon</h3>
+                    <p>Accessible only by swimming through a crevice at low tide, this emerald pool inside Miniloc Island is nature's cathedral. Floating on my back, I watched swifts dart between limestone walls that soared 50 meters overhead, their cries echoing like ancient chants.</p>
+                    
+                    <h3>Barracuda Lake</h3>
+                    <p>In Coron, a thermocline dive revealed surreal layers: 28°C freshwater atop 38°C saltwater, separated by a shimmering haze. Swimming through this liquid mirror felt like flying between worlds, with barracudas suspended like silver daggers in the blue.</p>
+                    
+                    <p>As we anchored at sunset near a deserted sandbar, feasting on freshly grilled lapu-lapu (grouper) while fireflies emerged in the mangroves, I realized paradise isn't a place—it's a moment suspended between wave and shore.</p>
+                `
+            }
+        ];
+
+        // DOM Elements
+        const blogGrid = document.getElementById('blogGrid');
+        const fullArticle = document.getElementById('fullArticle');
+        const articleContent = document.getElementById('articleContent');
+        const backButton = document.getElementById('backButton');
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        // Generate Blog Cards
+        function generateBlogCards() {
+            blogGrid.innerHTML = blogPosts.map(post => `
+                <article class="blog-card" data-id="${post.id}">
+                    <div class="blog-image" style="background-image: url('${post.image}')">
+                        <span class="blog-category">${post.category}</span>
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="blog-content">
+                        <h2>${post.title}</h2>
+                        <div class="blog-meta">
+                            <span><i class="fas fa-calendar-alt"></i> ${post.date}</span>
+                            <span><i class="fas fa-clock"></i> ${post.readTime}</span>
+                        </div>
+                        <p>${post.excerpt}</p>
+                        <div class="read-more">Continue Reading <i class="fas fa-arrow-right"></i></div>
+                    </div>
+                </article>
+            `).join('');
+
+            // Add click event to all cards
+            document.querySelectorAll('.blog-card').forEach(card => {
+                card.addEventListener('click', () => showFullArticle(card.dataset.id));
+            });
+        }
+
+        // Show Full Article
+        function showFullArticle(postId) {
+            const post = blogPosts.find(p => p.id == postId);
+            articleContent.innerHTML = post.content;
+            
+            // Switch views
+            document.querySelector('.blog-header').style.display = 'none';
+            document.querySelector('.blog-subheader').style.display = 'none';
+            blogGrid.style.display = 'none';
+            fullArticle.style.display = 'block';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Back Button
+        backButton.addEventListener('click', () => {
+            fullArticle.style.display = 'none';
+            document.querySelector('.blog-header').style.display = 'block';
+            document.querySelector('.blog-subheader').style.display = 'block';
+            blogGrid.style.display = 'grid';
+        });
+
+        // Mobile Menu Toggle
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+
+        // Initialize
+        generateBlogCards();
+    </script>
+</body>
+
+</html>
